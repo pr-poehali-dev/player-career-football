@@ -226,6 +226,96 @@ const Index = () => {
 
   const filteredVideos = videoFilter === 'all' ? videos : videos.filter(v => v.category === videoFilter);
 
+  const [selectedNews, setSelectedNews] = useState(null);
+  const [newsFilter, setNewsFilter] = useState('all');
+
+  const newsArticles = [
+    {
+      id: 1,
+      title: 'Петров продлевает контракт с Реалом до 2026 года',
+      summary: 'Российский нападающий подписал новое соглашение с мадридским клубом на рекордную сумму',
+      content: 'Александр Петров официально продлил контракт с ФК "Реал Мадрид" до 2026 года. Новое соглашение сделает его одним из самых высокооплачиваемых игроков клуба...',
+      author: 'Marca',
+      date: '2024-01-15',
+      category: 'transfers',
+      readTime: '3 мин',
+      image: '/img/6465ca4f-92b8-4def-8b97-f973a35253a7.jpg',
+      tags: ['Реал Мадрид', 'Контракт', 'Трансферы']
+    },
+    {
+      id: 2,
+      title: 'Интервью: "Я мечтал играть за Реал с детства"',
+      summary: 'Эксклюзивное интервью с Александром Петровым о карьере и планах на будущее',
+      content: 'В откровенном интервью нападающий рассказал о своем пути от Дортмунда до Реала, о работе с тренерами и своих амбициях...',
+      author: 'AS',
+      date: '2024-01-10',
+      category: 'interviews',
+      readTime: '7 мин',
+      image: '/img/6465ca4f-92b8-4def-8b97-f973a35253a7.jpg',
+      tags: ['Интервью', 'Карьера', 'Мотивация']
+    },
+    {
+      id: 3,
+      title: 'Петров признан лучшим игроком месяца в Ла Лиге',
+      summary: 'Российский форвард получил награду за выступления в декабре',
+      content: 'За 5 матчей в декабре Александр забил 8 голов и отдал 3 передачи, что принесло ему титул лучшего игрока месяца...',
+      author: 'ESPN',
+      date: '2024-01-05',
+      category: 'awards',
+      readTime: '2 мин',
+      image: '/img/6465ca4f-92b8-4def-8b97-f973a35253a7.jpg',
+      tags: ['Награды', 'Ла Лига', 'Достижения']
+    },
+    {
+      id: 4,
+      title: 'Тренировочные секреты успеха Петрова',
+      summary: 'Как российский нападающий поддерживает форму на высшем уровне',
+      content: 'Специальная программа тренировок, питание и восстановление - раскрываем секреты физической подготовки звезды...',
+      author: 'Goal.com',
+      date: '2023-12-28',
+      category: 'training',
+      readTime: '5 мин',
+      image: '/img/6465ca4f-92b8-4def-8b97-f973a35253a7.jpg',
+      tags: ['Тренировки', 'Фитнес', 'Подготовка']
+    },
+    {
+      id: 5,
+      title: 'Петров о сборной России: "Готов играть до последнего"',
+      summary: 'Капитан сборной рассказал о планах на предстоящие матчи',
+      content: 'В интервью перед товарищескими матчами капитан сборной России поделился мыслями о команде и будущих турнирах...',
+      author: 'Чемпионат',
+      date: '2023-12-20',
+      category: 'national',
+      readTime: '4 мин',
+      image: '/img/6465ca4f-92b8-4def-8b97-f973a35253a7.jpg',
+      tags: ['Сборная России', 'Капитан', 'Интервью']
+    },
+    {
+      id: 6,
+      title: 'Благотворительный фонд Петрова помогает детским школам',
+      summary: 'Футболист открыл новую программу поддержки юных спортсменов',
+      content: 'Александр Петров запустил новую инициативу своего фонда, направленную на развитие детского футбола в России...',
+      author: 'Спорт-Экспресс',
+      date: '2023-12-15',
+      category: 'charity',
+      readTime: '3 мин',
+      image: '/img/6465ca4f-92b8-4def-8b97-f973a35253a7.jpg',
+      tags: ['Благотворительность', 'Дети', 'Футбол']
+    }
+  ];
+
+  const newsCategories = [
+    { id: 'all', name: 'Все новости', icon: 'Newspaper' },
+    { id: 'transfers', name: 'Трансферы', icon: 'ArrowRightLeft' },
+    { id: 'interviews', name: 'Интервью', icon: 'Mic' },
+    { id: 'awards', name: 'Награды', icon: 'Trophy' },
+    { id: 'training', name: 'Тренировки', icon: 'Dumbbell' },
+    { id: 'national', name: 'Сборная', icon: 'Flag' },
+    { id: 'charity', name: 'Благотворительность', icon: 'Heart' }
+  ];
+
+  const filteredNews = newsFilter === 'all' ? newsArticles : newsArticles.filter(n => n.category === newsFilter);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       {/* Header */}
@@ -284,6 +374,14 @@ const Index = () => {
               >
                 <Icon name="Play" size={16} />
                 <span>Видео</span>
+              </Button>
+              <Button 
+                variant={activeTab === 'news' ? 'default' : 'ghost'}
+                onClick={() => setActiveTab('news')}
+                className="flex items-center space-x-2"
+              >
+                <Icon name="Newspaper" size={16} />
+                <span>Новости</span>
               </Button>
             </div>
           </nav>
@@ -1047,6 +1145,262 @@ const Index = () => {
                     <div className="text-4xl font-bold text-secondary">6</div>
                     <div className="text-sm text-muted-foreground">Категорий</div>
                   </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* News Section */}
+        {activeTab === 'news' && (
+          <div className="animate-fade-in space-y-6">
+            <h2 className="text-3xl font-bold text-center mb-8">Новости и интервью</h2>
+            
+            {/* News Categories Filter */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Icon name="Filter" className="h-6 w-6 text-primary" />
+                  <span>Категории новостей</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-3">
+                  {newsCategories.map((category) => (
+                    <Button
+                      key={category.id}
+                      variant={newsFilter === category.id ? 'default' : 'outline'}
+                      onClick={() => setNewsFilter(category.id)}
+                      className="flex items-center space-x-2"
+                    >
+                      <Icon name={category.icon} size={16} />
+                      <span>{category.name}</span>
+                      <Badge variant="secondary" className="ml-2">
+                        {category.id === 'all' ? newsArticles.length : newsArticles.filter(n => n.category === category.id).length}
+                      </Badge>
+                    </Button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Featured Article */}
+            {filteredNews.length > 0 && (
+              <Card className="overflow-hidden bg-gradient-to-r from-primary/5 to-secondary/5 border-2 border-primary/20">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
+                  <div className="relative">
+                    <img 
+                      src={filteredNews[0].image}
+                      alt={filteredNews[0].title}
+                      className="w-full h-64 lg:h-full object-cover"
+                    />
+                    <Badge className="absolute top-4 left-4 bg-primary text-primary-foreground">
+                      Главная новость
+                    </Badge>
+                  </div>
+                  <div className="p-6 flex flex-col justify-center">
+                    <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-3">
+                      <Icon name="Calendar" size={14} />
+                      <span>{new Date(filteredNews[0].date).toLocaleDateString('ru-RU')}</span>
+                      <span>•</span>
+                      <span>{filteredNews[0].readTime}</span>
+                      <span>•</span>
+                      <span className="font-medium">{filteredNews[0].author}</span>
+                    </div>
+                    <h3 className="text-2xl font-bold mb-4">{filteredNews[0].title}</h3>
+                    <p className="text-muted-foreground mb-4 leading-relaxed">{filteredNews[0].summary}</p>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {filteredNews[0].tags.map((tag, idx) => (
+                        <Badge key={idx} variant="outline" className="text-xs">
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                    <Button 
+                      onClick={() => setSelectedNews(filteredNews[0])}
+                      className="w-fit"
+                    >
+                      Читать полностью
+                      <Icon name="ArrowRight" size={16} className="ml-2" />
+                    </Button>
+                  </div>
+                </div>
+              </Card>
+            )}
+
+            {/* News Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredNews.slice(1).map((article, index) => (
+                <Card key={article.id} className="hover:shadow-lg transition-all duration-300 cursor-pointer group" style={{animationDelay: `${index * 0.1}s`}}>
+                  <div className="relative overflow-hidden">
+                    <img 
+                      src={article.image}
+                      alt={article.title}
+                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <Badge className="absolute top-2 right-2 bg-black/70 text-white text-xs">
+                      {article.readTime}
+                    </Badge>
+                  </div>
+                  
+                  <CardContent className="p-4">
+                    <div className="flex items-center space-x-2 text-xs text-muted-foreground mb-2">
+                      <Icon name="Calendar" size={12} />
+                      <span>{new Date(article.date).toLocaleDateString('ru-RU')}</span>
+                      <span>•</span>
+                      <span className="font-medium">{article.author}</span>
+                    </div>
+                    
+                    <h3 className="font-bold text-lg mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                      {article.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-3 line-clamp-3">{article.summary}</p>
+                    
+                    <div className="flex flex-wrap gap-1 mb-3">
+                      {article.tags.slice(0, 2).map((tag, idx) => (
+                        <Badge key={idx} variant="outline" className="text-xs">
+                          {tag}
+                        </Badge>
+                      ))}
+                      {article.tags.length > 2 && (
+                        <Badge variant="outline" className="text-xs">
+                          +{article.tags.length - 2}
+                        </Badge>
+                      )}
+                    </div>
+                    
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setSelectedNews(article)}
+                      className="w-full text-primary hover:text-primary/80"
+                    >
+                      Читать полностью
+                      <Icon name="ExternalLink" size={14} className="ml-1" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {/* News Modal */}
+            {selectedNews && (
+              <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4" onClick={() => setSelectedNews(null)}>
+                <div className="bg-card rounded-lg max-w-4xl w-full max-h-[90vh] overflow-auto animate-scale-in" onClick={e => e.stopPropagation()}>
+                  <div className="relative">
+                    <img 
+                      src={selectedNews.image}
+                      alt={selectedNews.title}
+                      className="w-full h-64 object-cover"
+                    />
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setSelectedNews(null)}
+                      className="absolute top-4 right-4 bg-black/70 text-white hover:bg-black/80"
+                    >
+                      <Icon name="X" size={20} />
+                    </Button>
+                  </div>
+                  
+                  <div className="p-6">
+                    <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-4">
+                      <Icon name="Calendar" size={14} />
+                      <span>{new Date(selectedNews.date).toLocaleDateString('ru-RU')}</span>
+                      <span>•</span>
+                      <span>{selectedNews.readTime}</span>
+                      <span>•</span>
+                      <span className="font-medium">{selectedNews.author}</span>
+                    </div>
+                    
+                    <h1 className="text-3xl font-bold mb-4">{selectedNews.title}</h1>
+                    
+                    <div className="flex flex-wrap gap-2 mb-6">
+                      {selectedNews.tags.map((tag, idx) => (
+                        <Badge key={idx} variant="outline">
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                    
+                    <div className="prose max-w-none">
+                      <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
+                        {selectedNews.summary}
+                      </p>
+                      <div className="text-foreground leading-relaxed whitespace-pre-line">
+                        {selectedNews.content}
+                      </div>
+                    </div>
+                    
+                    {/* Related Category */}
+                    <div className="mt-8 p-4 bg-muted rounded-lg">
+                      <div className="flex items-center space-x-2">
+                        <Icon name={newsCategories.find(c => c.id === selectedNews.category)?.icon || 'Newspaper'} size={16} className="text-primary" />
+                        <span className="font-semibold">Категория:</span>
+                        <span>{newsCategories.find(c => c.id === selectedNews.category)?.name}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* News Stats */}
+            <Card className="bg-gradient-to-r from-accent/10 to-primary/10 border-2 border-accent/20">
+              <CardHeader>
+                <CardTitle className="text-2xl text-center">Медиа-статистика</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                  <div className="space-y-2">
+                    <div className="text-4xl font-bold text-accent">{newsArticles.length}</div>
+                    <div className="text-sm text-muted-foreground">Публикаций</div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="text-4xl font-bold text-primary">
+                      {newsArticles.filter(n => n.category === 'interviews').length}
+                    </div>
+                    <div className="text-sm text-muted-foreground">Интервью</div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="text-4xl font-bold text-secondary">
+                      {newsCategories.length - 1}
+                    </div>
+                    <div className="text-sm text-muted-foreground">Тем</div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="text-4xl font-bold text-accent">15</div>
+                    <div className="text-sm text-muted-foreground">Изданий</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Latest Updates Timeline */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Icon name="Clock" className="h-6 w-6 text-primary" />
+                  <span>Последние обновления</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {newsArticles.slice(0, 4).map((article, index) => (
+                    <div key={article.id} className="flex items-start space-x-4 p-3 rounded-lg hover:bg-muted/50 transition-colors cursor-pointer"
+                         onClick={() => setSelectedNews(article)}>
+                      <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-semibold text-sm line-clamp-1">{article.title}</h4>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {new Date(article.date).toLocaleDateString('ru-RU')} • {article.author}
+                        </p>
+                      </div>
+                      <Badge variant="outline" className="text-xs flex-shrink-0">
+                        {newsCategories.find(c => c.id === article.category)?.name}
+                      </Badge>
+                    </div>
+                  ))}
                 </div>
               </CardContent>
             </Card>
