@@ -131,6 +131,100 @@ const Index = () => {
   ];
 
   const [selectedStadium, setSelectedStadium] = useState(null);
+  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [videoFilter, setVideoFilter] = useState('all');
+
+  const videos = [
+    {
+      id: 1,
+      title: 'Хет-трик в финале Лиги Чемпионов',
+      description: 'Три гола в финале против Ливерпуля, 2023',
+      thumbnail: '/img/6465ca4f-92b8-4def-8b97-f973a35253a7.jpg',
+      duration: '2:45',
+      views: '2.1M',
+      category: 'finals',
+      club: 'Реал Мадрид',
+      year: '2023',
+      goals: 3,
+      videoUrl: 'https://example.com/video1' // placeholder
+    },
+    {
+      id: 2,
+      title: 'Дебютный гол в АПЛ',
+      description: 'Первый гол в английской премьер-лиге',
+      thumbnail: '/img/6465ca4f-92b8-4def-8b97-f973a35253a7.jpg',
+      duration: '1:20',
+      views: '890K',
+      category: 'debuts',
+      club: 'Манчестер Юнайтед',
+      year: '2018',
+      goals: 1,
+      videoUrl: 'https://example.com/video2'
+    },
+    {
+      id: 3,
+      title: 'Победный гол в Эль Класико',
+      description: 'Решающий удар в ворота Барселоны на 89 минуте',
+      thumbnail: '/img/6465ca4f-92b8-4def-8b97-f973a35253a7.jpg',
+      duration: '1:15',
+      views: '3.2M',
+      category: 'classics',
+      club: 'Реал Мадрид',
+      year: '2022',
+      goals: 1,
+      videoUrl: 'https://example.com/video3'
+    },
+    {
+      id: 4,
+      title: 'Гол ножницами в Лиге Европы',
+      description: 'Невероятный удар через себя против Севильи',
+      thumbnail: '/img/6465ca4f-92b8-4def-8b97-f973a35253a7.jpg',
+      duration: '0:45',
+      views: '1.5M',
+      category: 'skills',
+      club: 'Манчестер Юнайтед',
+      year: '2020',
+      goals: 1,
+      videoUrl: 'https://example.com/video4'
+    },
+    {
+      id: 5,
+      title: 'Хет-трик за сборную',
+      description: 'Три гола в полуфинале Евро против Испании',
+      thumbnail: '/img/6465ca4f-92b8-4def-8b97-f973a35253a7.jpg',
+      duration: '3:10',
+      views: '4.1M',
+      category: 'national',
+      club: 'Сборная России',
+      year: '2021',
+      goals: 3,
+      videoUrl: 'https://example.com/video5'
+    },
+    {
+      id: 6,
+      title: 'Дальний удар с 30 метров',
+      description: 'Потрясающий гол с центра поля',
+      thumbnail: '/img/6465ca4f-92b8-4def-8b97-f973a35253a7.jpg',
+      duration: '0:30',
+      views: '2.8M',
+      category: 'skills',
+      club: 'Боруссия Дортмунд',
+      year: '2017',
+      goals: 1,
+      videoUrl: 'https://example.com/video6'
+    }
+  ];
+
+  const videoCategories = [
+    { id: 'all', name: 'Все видео', icon: 'Play' },
+    { id: 'finals', name: 'Финалы', icon: 'Trophy' },
+    { id: 'classics', name: 'Эль Класико', icon: 'Flame' },
+    { id: 'skills', name: 'Мастерство', icon: 'Star' },
+    { id: 'debuts', name: 'Дебюты', icon: 'Calendar' },
+    { id: 'national', name: 'Сборная', icon: 'Flag' }
+  ];
+
+  const filteredVideos = videoFilter === 'all' ? videos : videos.filter(v => v.category === videoFilter);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
@@ -182,6 +276,14 @@ const Index = () => {
               >
                 <Icon name="MapPin" size={16} />
                 <span>Стадионы</span>
+              </Button>
+              <Button 
+                variant={activeTab === 'videos' ? 'default' : 'ghost'}
+                onClick={() => setActiveTab('videos')}
+                className="flex items-center space-x-2"
+              >
+                <Icon name="Play" size={16} />
+                <span>Видео</span>
               </Button>
             </div>
           </nav>
@@ -742,6 +844,208 @@ const Index = () => {
                   <div className="space-y-2">
                     <div className="text-4xl font-bold text-primary">4</div>
                     <div className="text-sm text-muted-foreground">Страны</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* Videos Section */}
+        {activeTab === 'videos' && (
+          <div className="animate-fade-in space-y-6">
+            <h2 className="text-3xl font-bold text-center mb-8">Лучшие голы и моменты</h2>
+            
+            {/* Video Categories Filter */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Icon name="Filter" className="h-6 w-6 text-primary" />
+                  <span>Категории</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-3">
+                  {videoCategories.map((category) => (
+                    <Button
+                      key={category.id}
+                      variant={videoFilter === category.id ? 'default' : 'outline'}
+                      onClick={() => setVideoFilter(category.id)}
+                      className="flex items-center space-x-2"
+                    >
+                      <Icon name={category.icon} size={16} />
+                      <span>{category.name}</span>
+                      <Badge variant="secondary" className="ml-2">
+                        {category.id === 'all' ? videos.length : videos.filter(v => v.category === category.id).length}
+                      </Badge>
+                    </Button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Video Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredVideos.map((video, index) => (
+                <Card key={video.id} className="hover:shadow-lg transition-all duration-300 cursor-pointer group" style={{animationDelay: `${index * 0.1}s`}}>
+                  <div className="relative overflow-hidden rounded-t-lg">
+                    <img 
+                      src={video.thumbnail}
+                      alt={video.title}
+                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                      onClick={() => setSelectedVideo(video)}
+                    />
+                    
+                    {/* Play Button Overlay */}
+                    <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                         onClick={() => setSelectedVideo(video)}>
+                      <div className="bg-white/90 rounded-full p-4 shadow-lg animate-pulse-glow">
+                        <Icon name="Play" size={32} className="text-primary ml-1" />
+                      </div>
+                    </div>
+                    
+                    {/* Duration Badge */}
+                    <Badge className="absolute bottom-2 right-2 bg-black/70 text-white">
+                      {video.duration}
+                    </Badge>
+                    
+                    {/* Goals Badge */}
+                    <Badge className="absolute top-2 left-2 bg-accent text-accent-foreground">
+                      {video.goals} {video.goals === 1 ? 'гол' : 'гола'}
+                    </Badge>
+                  </div>
+                  
+                  <CardContent className="p-4">
+                    <h3 className="font-bold text-lg mb-2 line-clamp-2">{video.title}</h3>
+                    <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{video.description}</p>
+                    
+                    <div className="flex items-center justify-between text-sm">
+                      <div className="flex items-center space-x-2">
+                        <Icon name="Shield" size={14} className="text-primary" />
+                        <span className="font-medium">{video.club}</span>
+                      </div>
+                      <span className="text-muted-foreground">{video.year}</span>
+                    </div>
+                    
+                    <div className="flex items-center justify-between text-sm mt-2 pt-2 border-t">
+                      <div className="flex items-center space-x-1">
+                        <Icon name="Eye" size={14} className="text-secondary" />
+                        <span>{video.views} просмотров</span>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setSelectedVideo(video)}
+                        className="text-primary hover:text-primary/80"
+                      >
+                        Смотреть
+                        <Icon name="ExternalLink" size={14} className="ml-1" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {/* Video Modal */}
+            {selectedVideo && (
+              <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4" onClick={() => setSelectedVideo(null)}>
+                <div className="bg-card rounded-lg max-w-4xl w-full max-h-[90vh] overflow-auto animate-scale-in" onClick={e => e.stopPropagation()}>
+                  <div className="p-6">
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h2 className="text-2xl font-bold mb-2">{selectedVideo.title}</h2>
+                        <p className="text-muted-foreground">{selectedVideo.description}</p>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setSelectedVideo(null)}
+                      >
+                        <Icon name="X" size={20} />
+                      </Button>
+                    </div>
+                    
+                    {/* Video Player Placeholder */}
+                    <div className="relative bg-black rounded-lg mb-6 aspect-video flex items-center justify-center">
+                      <div className="text-center text-white">
+                        <Icon name="Play" size={64} className="mx-auto mb-4 opacity-60" />
+                        <p className="text-lg">Видеоплеер</p>
+                        <p className="text-sm opacity-60">Здесь будет видео: {selectedVideo.videoUrl}</p>
+                      </div>
+                    </div>
+                    
+                    {/* Video Info */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <div className="space-y-3">
+                        <h3 className="font-semibold">Детали матча</h3>
+                        <div className="space-y-2 text-sm">
+                          <div className="flex items-center space-x-2">
+                            <Icon name="Shield" size={16} className="text-primary" />
+                            <span>{selectedVideo.club}</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Icon name="Calendar" size={16} className="text-secondary" />
+                            <span>{selectedVideo.year}</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Icon name="Target" size={16} className="text-accent" />
+                            <span>{selectedVideo.goals} {selectedVideo.goals === 1 ? 'гол' : 'гола'}</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-3">
+                        <h3 className="font-semibold">Статистика</h3>
+                        <div className="space-y-2 text-sm">
+                          <div className="flex items-center space-x-2">
+                            <Icon name="Eye" size={16} className="text-primary" />
+                            <span>{selectedVideo.views} просмотров</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Icon name="Clock" size={16} className="text-secondary" />
+                            <span>{selectedVideo.duration} длительность</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-3">
+                        <h3 className="font-semibold">Категория</h3>
+                        <Badge variant="outline" className="w-fit">
+                          <Icon name={videoCategories.find(c => c.id === selectedVideo.category)?.icon || 'Play'} size={14} className="mr-1" />
+                          {videoCategories.find(c => c.id === selectedVideo.category)?.name}
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Video Stats Summary */}
+            <Card className="bg-gradient-to-r from-secondary/10 to-accent/10 border-2 border-secondary/20">
+              <CardHeader>
+                <CardTitle className="text-2xl text-center">Статистика видео</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                  <div className="space-y-2">
+                    <div className="text-4xl font-bold text-secondary">{videos.length}</div>
+                    <div className="text-sm text-muted-foreground">Всего видео</div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="text-4xl font-bold text-primary">{videos.reduce((sum, v) => sum + v.goals, 0)}</div>
+                    <div className="text-sm text-muted-foreground">Голов в видео</div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="text-4xl font-bold text-accent">
+                      {videos.reduce((sum, v) => sum + parseFloat(v.views.replace('M', '').replace('K', '')), 0).toFixed(1)}M
+                    </div>
+                    <div className="text-sm text-muted-foreground">Всего просмотров</div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="text-4xl font-bold text-secondary">6</div>
+                    <div className="text-sm text-muted-foreground">Категорий</div>
                   </div>
                 </div>
               </CardContent>
