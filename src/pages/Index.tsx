@@ -62,6 +62,76 @@ const Index = () => {
     { title: 'Лучший бомбардир сезона', year: '2023', type: 'individual' }
   ];
 
+  const stadiums = [
+    {
+      id: 1,
+      name: 'Сантьяго Бернабеу',
+      city: 'Мадрид',
+      country: 'Испания',
+      club: 'Реал Мадрид',
+      capacity: 81044,
+      matches: 67,
+      goals: 45,
+      coordinates: { lat: 40.4531, lng: -3.6883 },
+      period: '2021-2024',
+      memorable: 'Хет-трик в финале Лиги Чемпионов 2023'
+    },
+    {
+      id: 2,
+      name: 'Олд Траффорд',
+      city: 'Манчестер',
+      country: 'Англия',
+      club: 'Манчестер Юнайтед',
+      capacity: 74879,
+      matches: 52,
+      goals: 38,
+      coordinates: { lat: 53.4631, lng: -2.2914 },
+      period: '2018-2021',
+      memorable: 'Первый гол в АПЛ в дебютном матче'
+    },
+    {
+      id: 3,
+      name: 'Сигнал Идуна Парк',
+      city: 'Дортмунд',
+      country: 'Германия',
+      club: 'Боруссия Дортмунд',
+      capacity: 81365,
+      matches: 41,
+      goals: 19,
+      coordinates: { lat: 51.4927, lng: 7.4516 },
+      period: '2015-2018',
+      memorable: 'Дебютный гол в Бундеслиге'
+    },
+    {
+      id: 4,
+      name: 'Кемп Ноу',
+      city: 'Барселона',
+      country: 'Испания',
+      club: 'Барселона',
+      capacity: 99354,
+      matches: 3,
+      goals: 2,
+      coordinates: { lat: 41.3809, lng: 2.1228 },
+      period: 'Гостевые матчи',
+      memorable: 'Победный гол в Эль Класико'
+    },
+    {
+      id: 5,
+      name: 'Уэмбли',
+      city: 'Лондон',
+      country: 'Англия',
+      club: 'Сборная России',
+      capacity: 90000,
+      matches: 8,
+      goals: 6,
+      coordinates: { lat: 51.5560, lng: -0.2796 },
+      period: '2019-2024',
+      memorable: 'Хет-трик за сборную в полуфинале Евро'
+    }
+  ];
+
+  const [selectedStadium, setSelectedStadium] = useState(null);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted">
       {/* Header */}
@@ -104,6 +174,14 @@ const Index = () => {
               >
                 <Icon name="Award" size={16} />
                 <span>Достижения</span>
+              </Button>
+              <Button 
+                variant={activeTab === 'stadiums' ? 'default' : 'ghost'}
+                onClick={() => setActiveTab('stadiums')}
+                className="flex items-center space-x-2"
+              >
+                <Icon name="MapPin" size={16} />
+                <span>Стадионы</span>
               </Button>
             </div>
           </nav>
@@ -474,6 +552,196 @@ const Index = () => {
                   <div className="space-y-2">
                     <div className="text-4xl font-bold text-primary">12</div>
                     <div className="text-sm text-muted-foreground">Трофеев</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* Stadiums Section */}
+        {activeTab === 'stadiums' && (
+          <div className="animate-fade-in space-y-6">
+            <h2 className="text-3xl font-bold text-center mb-8">Карта стадионов</h2>
+            
+            {/* Interactive World Map */}
+            <Card className="overflow-hidden">
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Icon name="Globe" className="h-6 w-6 text-primary" />
+                  <span>Стадионы где я играл</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-0">
+                <div className="relative bg-gradient-to-br from-blue-50 to-green-50 h-96 overflow-hidden">
+                  <svg viewBox="0 0 1000 500" className="w-full h-full">
+                    {/* Simplified world map background */}
+                    <rect width="1000" height="500" fill="url(#worldGradient)" />
+                    <defs>
+                      <linearGradient id="worldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#e0f2fe" />
+                        <stop offset="100%" stopColor="#dcfce7" />
+                      </linearGradient>
+                    </defs>
+                    
+                    {/* Europe */}
+                    <path d="M450 150 L550 140 L580 180 L520 220 L450 200 Z" fill="#10b981" opacity="0.3" />
+                    {/* England */}
+                    <path d="M480 160 L500 155 L505 175 L485 180 Z" fill="#10b981" opacity="0.5" />
+                    {/* Spain */}
+                    <path d="M450 200 L480 195 L485 210 L455 215 Z" fill="#10b981" opacity="0.5" />
+                    {/* Germany */}
+                    <path d="M510 170 L530 165 L535 185 L515 190 Z" fill="#10b981" opacity="0.5" />
+                    
+                    {/* Stadium markers */}
+                    {stadiums.map((stadium, index) => {
+                      const x = stadium.country === 'Испания' ? (stadium.city === 'Мадрид' ? 465 : 470) :
+                               stadium.country === 'Англия' ? (stadium.city === 'Манчестер' ? 490 : 495) :
+                               stadium.country === 'Германия' ? 520 : 465;
+                      const y = stadium.country === 'Испания' ? (stadium.city === 'Мадрид' ? 205 : 210) :
+                               stadium.country === 'Англия' ? (stadium.city === 'Манчестер' ? 165 : 175) :
+                               stadium.country === 'Германия' ? 175 : 205;
+                      
+                      return (
+                        <g key={stadium.id}>
+                          <circle
+                            cx={x}
+                            cy={y}
+                            r="8"
+                            fill="#ff6b35"
+                            stroke="#fff"
+                            strokeWidth="2"
+                            className="cursor-pointer hover:r-10 transition-all animate-pulse-glow"
+                            onClick={() => setSelectedStadium(stadium)}
+                          />
+                          <text
+                            x={x}
+                            y={y - 12}
+                            textAnchor="middle"
+                            fontSize="10"
+                            fill="#1a1a1a"
+                            className="font-semibold"
+                          >
+                            {stadium.city}
+                          </text>
+                        </g>
+                      );
+                    })}
+                  </svg>
+                  
+                  {/* Stadium detail popup */}
+                  {selectedStadium && (
+                    <div className="absolute top-4 right-4 bg-card border rounded-lg p-4 shadow-lg max-w-sm animate-scale-in">
+                      <div className="flex justify-between items-start mb-3">
+                        <h3 className="font-bold text-lg">{selectedStadium.name}</h3>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setSelectedStadium(null)}
+                        >
+                          <Icon name="X" size={16} />
+                        </Button>
+                      </div>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex items-center space-x-2">
+                          <Icon name="MapPin" size={14} className="text-primary" />
+                          <span>{selectedStadium.city}, {selectedStadium.country}</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Icon name="Shield" size={14} className="text-secondary" />
+                          <span>{selectedStadium.club}</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Icon name="Users" size={14} className="text-accent" />
+                          <span>{selectedStadium.capacity.toLocaleString()} мест</span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2 mt-3 p-2 bg-muted rounded">
+                          <div className="text-center">
+                            <div className="font-bold text-primary">{selectedStadium.matches}</div>
+                            <div className="text-xs">Матчи</div>
+                          </div>
+                          <div className="text-center">
+                            <div className="font-bold text-secondary">{selectedStadium.goals}</div>
+                            <div className="text-xs">Голы</div>
+                          </div>
+                        </div>
+                        <div className="text-xs text-muted-foreground mt-2 p-2 bg-accent/10 rounded">
+                          <strong>Памятный момент:</strong><br />
+                          {selectedStadium.memorable}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Stadium Statistics */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {stadiums.map((stadium) => (
+                <Card key={stadium.id} className="hover:shadow-lg transition-all duration-300 cursor-pointer" onClick={() => setSelectedStadium(stadium)}>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg">{stadium.name}</CardTitle>
+                    <p className="text-sm text-muted-foreground">{stadium.city}, {stadium.country}</p>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex items-center space-x-2">
+                      <Icon name="Shield" size={16} className="text-primary" />
+                      <span className="text-sm font-medium">{stadium.club}</span>
+                    </div>
+                    
+                    <div className="grid grid-cols-3 gap-2 text-center">
+                      <div className="p-2 bg-muted rounded">
+                        <div className="font-bold text-primary">{stadium.matches}</div>
+                        <div className="text-xs text-muted-foreground">Матчи</div>
+                      </div>
+                      <div className="p-2 bg-muted rounded">
+                        <div className="font-bold text-secondary">{stadium.goals}</div>
+                        <div className="text-xs text-muted-foreground">Голы</div>
+                      </div>
+                      <div className="p-2 bg-muted rounded">
+                        <div className="font-bold text-accent">{(stadium.goals / stadium.matches).toFixed(1)}</div>
+                        <div className="text-xs text-muted-foreground">Г/М</div>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-sm">
+                        <span>Вместимость</span>
+                        <span className="font-semibold">{stadium.capacity.toLocaleString()}</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span>Период</span>
+                        <span className="font-semibold">{stadium.period}</span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {/* Stadium Summary Stats */}
+            <Card className="bg-gradient-to-r from-primary/10 to-secondary/10 border-2 border-primary/20">
+              <CardHeader>
+                <CardTitle className="text-2xl text-center">Статистика по стадионам</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                  <div className="space-y-2">
+                    <div className="text-4xl font-bold text-primary">{stadiums.length}</div>
+                    <div className="text-sm text-muted-foreground">Стадионов</div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="text-4xl font-bold text-secondary">{stadiums.reduce((sum, s) => sum + s.matches, 0)}</div>
+                    <div className="text-sm text-muted-foreground">Всего матчей</div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="text-4xl font-bold text-accent">{stadiums.reduce((sum, s) => sum + s.goals, 0)}</div>
+                    <div className="text-sm text-muted-foreground">Всего голов</div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="text-4xl font-bold text-primary">4</div>
+                    <div className="text-sm text-muted-foreground">Страны</div>
                   </div>
                 </div>
               </CardContent>
